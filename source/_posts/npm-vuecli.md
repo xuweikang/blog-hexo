@@ -357,11 +357,19 @@ nded) npm
     return data
   }
   ```
+### 为什么vue init命令也可以？
+按照之前所说的，如果要使用命令必须要在package.json 里面的bin字段进行说明，看到只有vue，vue-init，vue-list，如果是vue init 是使用了vue的命令的话，那么init肯定是作为一个参数传入的，bin/vue里面也并没有关于对init参数的具体执行，只有一些简单的参数说明。
+也可以注意到，在命令行中敲入vue init和vue-init 是同样的效果。其实，两个命令是同一个逻辑，具体要看{% link commander readme 'https://github.com/tj/commander.js/blob/master/Readme.md' 'vue-cli' %}里面有这样一段话：
 
-  
+>When .command() is invoked with a description argument, no .action(callback) should be called to handle sub-commands, otherwise there will be an error. This tells commander that you're going to use separate executables for sub-commands, much like git(1) and other popular tools.
+The commander will try to search the executables in the directory of the entry script (like ./examples/pm) with the name program-command, like pm-install, pm-search.
 
-### 具体交互逻辑和命令补充
+### 总结一下
+前端脚手架的开发，依靠的是npm的全局包安装，在package.json里面的bin字段指定命令名字和对应的脚本处理，以键值对的方式声明。npm包在全局安装的时候，npm会将bin里面的命令，在PATH目录里面创建一个软连接，使得可以直接在终端里使用这些指令。如果是本地开发的npm包，可以通过npm link手动链接到PATH目录。
+对于vue-cli，会在初始化的时候去模板仓库下载对应的模板，然后通过收录一些问题，把这些用户定制化的信息更新到meta.js中，metalsmith做渲染的时候，拿到meta.js里面的配置数据，生成一个最终的静态骨架。
 
 ### 发布到npm
-
-### 测试
+在本地开发完脚手架后，需要把对应的包放到npm仓库中供其他人下载使用。
+首先去npm仓库注册一个npm账号，
+然后在本地包目录下登陆npm,   npm login
+最后发布，   npm publish
